@@ -27,15 +27,54 @@
 
 // server.listen(4000);
 
-const http = require('http');
 
-const routes = require('./routes');
+
+//Importing routes file to create server for incoming requests
+
+// const http = require('http');
+
+// const routes = require('./routes');
+
+// const hostname = '127.0.0.1';
+// const port = 3000;
+
+// const server = http.createServer(routes);
+
+// server.listen(port, hostname, () => {
+//     console.log(`Server running at http://${hostname}:${port}/`);
+// });
+
+
+//Implementing Express Js framework in node
+
+//Command to start express js project: npm install --save express
+//Command to create package.json file: npm init
+//Command to create node_module file:  npm install --save-dev
+//Command to start the node js server: node app.js or npm start
+
+
+const express = require('express');
 
 const hostname = '127.0.0.1';
 const port = 3000;
 
-const server = http.createServer(routes);
+const app = express();
 
-server.listen(port, hostname, () => {
+app.use((req, res, next) => {
+
+    console.log('In the middleware');
+    next(); //should be used when we are not sending any response
+
+});
+
+app.use((req, res, next) => {
+
+    console.log('In another middleware');
+    res.send('<h1>Hello from Express</h1>')
+    //next();
+
+});
+
+app.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
 });
