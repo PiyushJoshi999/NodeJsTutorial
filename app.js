@@ -52,29 +52,51 @@
 //Command to create node_module file:  npm install --save-dev
 //Command to start the node js server: node app.js or npm start
 
+//Note: You should not send more than 1 response at a time.
+
+/*
+In your current setup, you are using app.use for both the "/add-product" and "/" paths. The issue is that app.use matches the specified path as a prefix for the route, so when you access "/add-product," it also matches the "/" path, and the first matching middleware (app.use("/")) is executed.
+
+To fix this, you can use app.get for specific routes, and make sure to end the response within each route handler to prevent subsequent middleware from being executed. 
+ */
+
+//Command to install body-parser : npm install --save body-parser
 
 const express = require('express');
+const bodyParser = require('body-parser');
 
 const hostname = '127.0.0.1';
 const port = 3000;
 
 const app = express();
+const adminRouter = require('./routes/admin');
+const shopRouter = require('./routes/shop');
 
-app.use((req, res, next) => {
+app.use(bodyParser.urlencoded({extended: false}));
 
-    console.log('In the middleware');
-    next(); //should be used when we are not sending any response
 
-});
 
-app.use((req, res, next) => {
+// app.get("/add-product", (req, res, next) => {
 
-    console.log('In another middleware');
-    res.send('<h1>Hello from Express</h1>')
-    //next();
+//     console.log('In /add-product middleware');
+//     res.send('<form action="/product" method="POST"><input type="text" name="title" ><button type="submit">Add Product</button></form>');
 
-});
+// });
+
+// app.post("/product", (req, res, next) => {
+//     console.log(req.body);
+//     res.redirect('/');
+// });
+
+// app.use("/", (req, res, next) => {
+//     console.log('In / middleware');
+//     res.send('<h1>Hello from Express!!</h1>');
+// });
+
+app.use(adminRouter);
+app.use(shopRouter);
 
 app.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
 });
+
