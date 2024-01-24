@@ -1,15 +1,20 @@
 const express = require('express');
+const path = require('path');
+const rootDir = require('../helpers/path');
 
 const router = express.Router();
 
 router.get("/add-product", (req, res, next) => {
 
-    console.log('In /add-product middleware');
-    res.send('<form action="/product" method="POST"><input type="text" name="title" ><button type="submit">Add Product</button></form>');
+    //console.log('In /add-product middleware');
+    //res.sendFile(path.join(__dirname, '../', 'views', 'add-product.html'));
+    res.sendFile(path.join(rootDir, 'views', 'add-product.html'));
 
 });
 
-router.post("/product", (req, res, next) => {
+//We can use the same url for different methods like get, post, 
+
+router.post("/add-product", (req, res, next) => {
     console.log(req.body);
     res.redirect('/');
 });

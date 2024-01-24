@@ -64,6 +64,7 @@ To fix this, you can use app.get for specific routes, and make sure to end the r
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const path = require('path');
 
 const hostname = '127.0.0.1';
 const port = 3000;
@@ -73,6 +74,7 @@ const adminRouter = require('./routes/admin');
 const shopRouter = require('./routes/shop');
 
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(express.static(path.join(__dirname, 'public')));
 
 
 
@@ -93,8 +95,17 @@ app.use(bodyParser.urlencoded({extended: false}));
 //     res.send('<h1>Hello from Express!!</h1>');
 // });
 
+//app.use('/admin', adminRouter);
+
+
 app.use(adminRouter);
 app.use(shopRouter);
+
+//code for 404 error if user enters invalid url
+
+app.use((req, res, next) => {
+    res.status(404).sendFile(path.join(__dirname, 'views', 'error-404.html'));
+});
 
 app.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
