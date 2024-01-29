@@ -70,8 +70,9 @@ const hostname = '127.0.0.1';
 const port = 3000;
 
 const app = express();
-const adminRouter = require('./routes/admin');
-const shopRouter = require('./routes/shop');
+const adminRoutes = require('./routes/admin');
+const shopRoutes = require('./routes/shop');
+const errorController = require('./controllers/error');
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -98,14 +99,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 //app.use('/admin', adminRouter);
 
 
-app.use(adminRouter);
-app.use(shopRouter);
+app.use(adminRoutes);
+app.use(shopRoutes);
 
 //code for 404 error if user enters invalid url
 
-app.use((req, res, next) => {
-    res.status(404).sendFile(path.join(__dirname, 'views', 'error-404.html'));
-});
+// app.use((req, res, next) => {
+//     res.status(404).sendFile(path.join(__dirname, 'views', 'error-404.html'));
+// });
+
+app.use(errorController.errMsg);
 
 app.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
