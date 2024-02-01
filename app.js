@@ -78,7 +78,6 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-
 // app.get("/add-product", (req, res, next) => {
 
 //     console.log('In /add-product middleware');
